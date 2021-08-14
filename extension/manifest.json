@@ -1,0 +1,22 @@
+{
+    "name": "replace this world",
+    "version": "0.0.1",
+    "desciption": "Change a word you don't like to see anymore",
+    "manifest_version": 3,
+    "permissions": [
+        "activeTab",
+        "scripting",
+        "storage",
+        "tabs",
+        "http://*/",
+        "https://*/"
+
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "host_permissions": [
+        "http://*/",
+        "https://*/"
+    ]
+}
