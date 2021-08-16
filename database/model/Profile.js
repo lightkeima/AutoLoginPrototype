@@ -1,16 +1,7 @@
 const mongoose = require('mongoose');
 
-const accountScheme = new mongoose.Schema({
-
+const profileScheme = new mongoose.Schema({
     id: {
-        type: Number,
-        required: true,
-    },
-    profile_id: {
-        type: Number,
-        required: true,
-    },
-    web_id: {
         type: Number,
         required: true,
     },
@@ -28,7 +19,7 @@ const accountScheme = new mongoose.Schema({
     },
 
 }, {
-    collection: 'account'
+    collection: 'profile'
 });
 
-module.exports = mongoose.model('account', accountScheme);
+module.exports = mongoose.model('profile', profileScheme);

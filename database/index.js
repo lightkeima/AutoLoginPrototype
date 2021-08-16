@@ -10,8 +10,6 @@ const authRoutes = require('./routes/auth');
 
 dotenv.config();
 
-
-
 var key = fs.readFileSync(__dirname + '/security/cert.key');
 var cert = fs.readFileSync(__dirname + '/security/cert.pem');
 console.log(__dirname + '/security/cert.key');
