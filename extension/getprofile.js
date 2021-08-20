@@ -13,28 +13,30 @@ async function getProfile(data = {}) {
     });
     return response.json(); // parses JSON response into native JavaScript objects
 }
-chrome.storage.sync.get(["data"], ({
-    data
-}) => {
-    getProfile(data).then(function(rdata) {
-        fdata = {
-            name_of_id_field: data.name_of_id_field,
-            name_of_password_field: data.name_of_password_field,
-            name_of_button: data.name_of_button,
-            name_of_form: data.name_of_form,
-            id_find_by: data.id_find_by,
-            pass_find_by: data.pass_find_by,
-            form_find_by: data.form_find_by,
-            button_find_by: data.button_find_by,
-            submit_type: data.submit_type,
-            username: rdata.data["username"],
-            password: rdata.data["password"]
-        }
-        chrome.runtime.sendMessage({
-            message: {
-                script: "account",
-                data: fdata
-            },
-        })
-    });
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.message.script === 'getprofile') {
+        var data = request.message.data.data;
+        getProfile(data).then(function(rdata) {
+            fdata = {
+                name_of_id_field: data.name_of_id_field,
+                name_of_password_field: data.name_of_password_field,
+                name_of_button: data.name_of_button,
+                name_of_form: data.name_of_form,
+                id_find_by: data.id_find_by,
+                pass_find_by: data.pass_find_by,
+                form_find_by: data.form_find_by,
+                button_find_by: data.button_find_by,
+                submit_type: data.submit_type,
+                username: rdata.data["username"],
+                password: rdata.data["password"]
+            }
+            chrome.runtime.sendMessage({
+                message: {
+                    script: "account",
+                    data: fdata
+                },
+            })
+        });
+    }
 });

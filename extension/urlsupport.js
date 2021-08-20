@@ -13,16 +13,17 @@ async function getUrlSupport(data = {}) {
     });
     return response.json(); // parses JSON response into native JavaScript objects
 }
-chrome.storage.sync.get(["data"], ({
-    data
-}) => {
 
-    getUrlSupport(data).then((rdata) => {
-        chrome.runtime.sendMessage({
-            message: {
-                script: "url_support",
-                data: rdata
-            }
-        })
-    });
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.message.script === 'url_support') {
+        var data = request.message.data.data;
+        getUrlSupport(data).then((rdata) => {
+            chrome.runtime.sendMessage({
+                message: {
+                    script: "url_support_done",
+                    data: rdata
+                }
+            })
+        });
+    }
 });
