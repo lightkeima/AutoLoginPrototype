@@ -123,7 +123,7 @@ router.post("/account", async (req, res) => {
     isAccountExist = await Account.findOne({
         id: req.body.id
     });
-    var bytes  = CryptoJS.AES.decrypt(isAccountExist["password"], process.env.ENCRYPT_KEY);
+    var bytes = CryptoJS.AES.decrypt(isAccountExist["password"], process.env.ENCRYPT_KEY);
     var originalpssword = bytes.toString(CryptoJS.enc.Utf8);
     isAccountExist["password"] = originalpssword;
     if (isAccountExist) {
@@ -140,7 +140,7 @@ router.post("/profile", async (req, res) => {
     isProfileExist = await Profile.findOne({
         id: req.body.id
     });
-    var bytes  = CryptoJS.AES.decrypt(isProfileExist["password"], process.env.ENCRYPT_KEY);
+    var bytes = CryptoJS.AES.decrypt(isProfileExist["password"], process.env.ENCRYPT_KEY);
     var originalpssword = bytes.toString(CryptoJS.enc.Utf8);
     isProfileExist["password"] = originalpssword;
     if (isAccountExist) {

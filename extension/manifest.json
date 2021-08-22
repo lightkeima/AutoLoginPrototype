@@ -1,7 +1,7 @@
 {
-    "name": "replace this world",
+    "name": "Custom Autologin extension",
     "version": "0.0.1",
-    "desciption": "Change a word you don't like to see anymore",
+    "desciption": "A custom extension for autologin using credential database",
     "manifest_version": 3,
     "permissions": [
         "activeTab",
