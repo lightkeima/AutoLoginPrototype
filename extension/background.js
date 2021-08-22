@@ -8,20 +8,27 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             var data = {
                 url: url
             }
-
-            chrome.storage.sync.set({
-                data: data
-            });
-
-            chrome.scripting.executeScript({
-                    target: {
-                        tabId: tabId
-                    },
-                    files: ["./urlsupport.js"]
-                })
-                .then(() => {
-                    console.log("INJECTED THE FOREGROUND SCRIPT.");
-                });
+            /*
+                        chrome.storage.sync.set({
+                            data: data
+                        });
+                        
+                        chrome.scripting.executeScript({
+                                target: {
+                                    tabId: tabId
+                                },
+                                files: ["./urlsupport.js"]
+                            })
+                            .then(() => {
+                                console.log("INJECTED THE FOREGROUND SCRIPT.");
+                            });
+                        */
+            chrome.runtime.sendMessage({
+                message: {
+                    script: "url_support",
+                    data: data
+                }
+            })
         });
 
     }
@@ -32,7 +39,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         active: true,
         lastFocusedWindow: true
     }, tabs => {
-        if (request.message.script === 'url_support') {
+        if (request.message.script === 'url_support_done') {
             var data;
             if (request.message.data.data !== "Not found") {
                 var rdata = request.message.data.data;
@@ -49,6 +56,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     button_find_by: rdata.button_find_by,
                     submit_type: rdata.submit_type,
                 };
+                /*
                 chrome.storage.sync.set({
                     data: data
                 });
@@ -62,6 +70,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     .then(() => {
                         console.log("INJECTED THE FOREGROUND SCRIPT.");
                     });
+                */
+                chrome.runtime.sendMessage({
+                    message: {
+                        script: "getprofile",
+                        data: data
+                    }
+                })
                 return true;
             }
             return false;
