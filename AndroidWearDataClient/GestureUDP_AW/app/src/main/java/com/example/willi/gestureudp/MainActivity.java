@@ -23,7 +23,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends Activity implements SensorEventListener {
 
-    private WatchViewStub mStub;
     private Button switchButton;
     private SensorManager mSensorManager;
     //private Sensor mSensor;
@@ -37,7 +36,9 @@ public class MainActivity extends Activity implements SensorEventListener {
     private int app_status = Config.APP_STATUS_NONE;
     private EditText et1;
     private EditText et2;
+    private EditText et3;
     private ArrayList<SPRING> springList;
+    private  int delay = 20000;
     private UdpSender sender2 = new UdpSender();
     public MainActivity() throws SocketException, UnknownHostException {
     }
@@ -51,6 +52,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         switchButton = (Button) findViewById(R.id.button);
         et1 = (EditText) findViewById(R.id.edit1);
         et2 = (EditText) findViewById(R.id.edit2);
+        et3 = (EditText) findViewById(R.id.edit3);
 
         switchButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -59,8 +61,10 @@ public class MainActivity extends Activity implements SensorEventListener {
                             case Config.APP_STATUS_NONE: {
                                 sender2.setHost(et1.getText().toString());
                                 String sTextFromET = et2.getText().toString();
-                                int nIntFromET = new Integer(sTextFromET).intValue();
+                                int nIntFromET = Integer.parseInt(sTextFromET);
                                 sender2.setPort(nIntFromET);
+                                String sTextFromET2 = et3.getText().toString();
+                                delay = Integer.parseInt(sTextFromET2);
                                 startRecognition();
                                 break;
                             }
@@ -100,8 +104,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         switchButton.setText(Config.SWITCH_BUTT_TXT_STOP_RECOGNITION);
         switchButton.setBackgroundColor(Color.RED);
-        mSensorManager.registerListener(this, accSensor, 0);
-        mSensorManager.registerListener(this, gyroSensor, 0);
+        mSensorManager.registerListener(this, accSensor, delay);
+        mSensorManager.registerListener(this, gyroSensor, delay);
     }
 
     /**
@@ -112,7 +116,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 
         switchButton.setBackgroundColor(Color.GREEN);
         switchButton.setText(Config.SWITCH_BUTT_TXT_START_RECOGNITION);
-        mStub.setBackgroundColor(Color.WHITE);
         mSensorManager.unregisterListener(this);
 
     }
@@ -138,7 +141,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         else if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
             gyrStatus = true;
             dataNode.setGYR(event);
-        }
+       }
 
         //do not do signal processing until we get both acc data and gyro data
         if (accStatus && gyrStatus) {
@@ -151,35 +154,12 @@ public class MainActivity extends Activity implements SensorEventListener {
             switch (app_status) {
                 case Config.APP_STATUS_RECOGNITION:
                 {
-                    String json = new Gson().toJson(dataNode);
 
-                    //for (int i = 0; i < springList.size(); i++) {   //this is for the situation that several gestures are recognized at the same time
-                    //int result = springList.get(i).SignalProcess(dataNode, (int) pktNum);
-                    //if (result == Config.SPRING_TYPE_GESTURE) {
-                    //Toast.makeText(this, springList.get(i).getName(), Toast.LENGTH_SHORT).show();
-                    sender2.SendTo(json.getBytes());  //found a gesture, send message to server through UDPs
-                    //}
+                    String json = new Gson().toJson(dataNode);
+                    sender2.SendTo(json.getBytes());
                 }
                 break;
             }
-            /*
-            switch (app_status) {
-                case Config.APP_STATUS_RECOGNITION: {
-//                    for (int i = 0; i < springList.size(); i++) {   //this is for the situation that several gestures are recognized at the same time
-//                        int result = springList.get(i).SignalProcess(dataNode, (int) pktNum);
-//                        if (result == Config.SPRING_TYPE_GESTURE) {
-//                            Toast.makeText(this, springList.get(i).getName(), Toast.LENGTH_SHORT).show();
-//                            sender.send(springList.get(i).getName() + "found!", this);  //found a gesture, send message to server through UDPs
-//                        }
-//                    }
-                    String json = new Gson().toJson(dataNode);
-//
-
-                    }
-                    break;
-                }
-            }*/
-
 
         }
     }

@@ -22,13 +22,13 @@ import java.net.*;
 
 public class UdpSender {
     final Handler toastHandler = new Handler();
-    String host = "192.168.0.101";
-    int port = 4569;
-    public void setPort(int port){
-        this.port = port;
+    static String host = "192.168.0.101";
+    static int port = 4569;
+    public void setPort(int p){
+        port = p;
     }
-    public void setHost(String host){
-        this.host = host;
+    public void setHost(String h){
+        host = h;
     }
     public void SendTo(byte[] msgBytes) {
 
@@ -42,7 +42,7 @@ public class UdpSender {
                     DatagramSocket socket = new DatagramSocket();
                     if (!socket.getBroadcast()) socket.setBroadcast(true);
                     DatagramPacket packet = new DatagramPacket(buf, buf.length,
-                            serverAddress, this.port);
+                            serverAddress, 4569);
                     socket.send(packet);
                     socket.close();
                 } catch (final UnknownHostException e) {
