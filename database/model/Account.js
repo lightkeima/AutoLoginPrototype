@@ -17,14 +17,14 @@ const accountScheme = new mongoose.Schema({
     username: {
         type: String,
         required: true,
-        min: 2,
-        max: 2000,
+        min: 0,
+        max: 512,
     },
     password: {
         type: String,
         required: true,
         min: 0,
-        max: 255,
+        max: 512,
     },
 
 }, {

@@ -5,17 +5,23 @@ const profileScheme = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    feature_vector: {
+        type: [Number],
+        required: false,
+        min: 0,
+        max: 2560,
+    },
     username: {
         type: String,
-        required: true,
-        min: 2,
-        max: 2000,
+        required: false,
+        min: 0,
+        max: 512,
     },
     password: {
         type: String,
-        required: true,
+        required: false,
         min: 0,
-        max: 255,
+        max: 512,
     },
 
 }, {

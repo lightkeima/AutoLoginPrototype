@@ -62,6 +62,7 @@ router.post("/addprofile", async (req, res) => {
 
     const profile = new Profile({
         id: req.body.id,
+        feature_vector: req.body.feature_vector,
         username: req.body.web_id,
         password: password,
     });
@@ -119,6 +120,7 @@ router.post("/addurl", async (req, res) => {
     }
 });
 
+
 router.post("/account", async (req, res) => {
     isAccountExist = await Account.findOne({
         id: req.body.id
@@ -153,7 +155,6 @@ router.post("/profile", async (req, res) => {
 
 });
 
-
 router.post("/url", async (req, res) => {
 
     isUrlExist = await Url.findOne({
@@ -169,6 +170,11 @@ router.post("/url", async (req, res) => {
     });
 
 });
+
+//TODO
+// Implement /updateprofile
+// Implement /updateaccount
+// Implement /updateurl
 
 
 module.exports = router;
